@@ -5,7 +5,9 @@
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Arrays;
+import java.util.Iterator;
 
 public class Board {
     private int[][] boardTiles;
@@ -81,7 +83,7 @@ public class Board {
         Board that = (Board) y;
         if (this.dimension != that.dimension) return false;
 
-        for (int row = 0; row < dimension; row +=1) {
+        for (int row = 0; row < dimension; row += 1) {
             for (int col = 0; col < dimension; col += 1) {
                 if (this.boardTiles[row][col] != that.boardTiles[row][col]) {
                     return false;
@@ -92,8 +94,32 @@ public class Board {
     }
 
     // all neighboring boards
-    public Iterable<Board> neighbors() {
+    public Iterator<Board> neighbors() {
+        return new NeighborsIterator();
+    }
 
+    private class NeighborsIterator implements Iterator<Board> {
+        Board[] neighbors = new Board[4];
+        int index = 0;
+
+        public NeighborsIterator() {
+            for (int boardIndex = 0; boardIndex < 4; boardIndex += 1) {
+                int[][] constructionTiles = new int[dimension][dimension];
+                for (int row = 0; row < dimension; row += 1) {
+                    constructionTiles[row] = Arrays.copyOf(boardTiles[row], 4);
+                }
+            }
+        }
+
+        public boolean hasNext() {
+            return neighbors[index] != null;
+        }
+
+        public Board next() {
+            int currentIndex = index;
+            index += 1;
+            return neighbors[currentIndex];
+        }
     }
 
     // a board that is obtained by exchanging any pair of tiles
