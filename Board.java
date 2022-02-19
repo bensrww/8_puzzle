@@ -130,6 +130,34 @@ public class Board {
             return constructionTiles;
         }
 
+        public Board getUpNeighbor() {
+            int[][] duplicate = createDuplicateTiles();
+            swapTile(duplicate, emptyRowIndex, emptyColIndex, emptyRowIndex - 1,
+                     emptyColIndex);
+            return new Board(duplicate);
+        }
+
+        public Board getDownNeighbor() {
+            int[][] duplicate = createDuplicateTiles();
+            swapTile(duplicate, emptyRowIndex, emptyColIndex, emptyRowIndex + 1,
+                     emptyColIndex);
+            return new Board(duplicate);
+        }
+
+        public Board getLeftNeighbor() {
+            int[][] duplicate = createDuplicateTiles();
+            swapTile(duplicate, emptyRowIndex, emptyColIndex, emptyRowIndex,
+                     emptyColIndex - 1);
+            return new Board(duplicate);
+        }
+
+        public Board getRightNeighbor() {
+            int[][] duplicate = createDuplicateTiles();
+            swapTile(duplicate, emptyRowIndex, emptyColIndex, emptyRowIndex,
+                     emptyColIndex + 1);
+            return new Board(duplicate);
+        }
+
         public NeighborsIterator() {
             findEmptyTile();
 
@@ -137,31 +165,27 @@ public class Board {
             // Empty cell at top-left
             if (emptyRowIndex == 0 && emptyColIndex == 0) {
                 // Swap empty with right
-                int[][] swapWithRight = createDuplicateTiles();
-                swapTile(swapWithRight, emptyRowIndex, emptyColIndex, emptyRowIndex,
-                         emptyColIndex + 1);
-                neighbors[0] = new Board(swapWithRight);
-
+                neighbors[0] = getRightNeighbor();
                 // Swap empty with below
-                int[][] swapWithBelow = createDuplicateTiles();
-                swapTile(swapWithBelow, emptyRowIndex, emptyColIndex, emptyRowIndex + 1,
-                         emptyColIndex);
-                neighbors[1] = new Board(swapWithRight);
+                neighbors[1] = getDownNeighbor();
             }
 
             // Empty cell at top-right
             else if (emptyRowIndex == 0 && emptyColIndex == dimension) {
-
+                neighbors[0] = getLeftNeighbor();
+                neighbors[1] = getDownNeighbor();
             }
 
             // Empty cell at bottom-left
             else if (emptyRowIndex == dimension && emptyColIndex == 0) {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getRightNeighbor();
             }
 
             // Empty cell at bottom-right
             else if (emptyRowIndex == dimension && emptyColIndex == dimension) {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getLeftNeighbor();
             }
 
             // ----------------------------------------------------------------------------------
