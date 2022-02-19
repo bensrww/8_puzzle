@@ -101,14 +101,42 @@ public class Board {
     private class NeighborsIterator implements Iterator<Board> {
         Board[] neighbors = new Board[4];
         int index = 0;
+        int emptyRowIndex;
+        int emptyColIndex;
 
-        public NeighborsIterator() {
-            for (int boardIndex = 0; boardIndex < 4; boardIndex += 1) {
-                int[][] constructionTiles = new int[dimension][dimension];
-                for (int row = 0; row < dimension; row += 1) {
-                    constructionTiles[row] = Arrays.copyOf(boardTiles[row], 4);
+        public void findEmptyTile() {
+            for (int row = 0; row < dimension; row += 1) {
+                for (int col = 0; col < dimension; col += 1) {
+                    if (boardTiles[row][col] == 0) {
+                        emptyRowIndex = row;
+                        emptyColIndex = col;
+                        return;
+                    }
                 }
             }
+        }
+
+        public void swapTile(int[][] array, int thisRow, int thisCol, int thatRow, int thatCol) {
+            int temp = array[thisRow][thisCol];
+            array[thisRow][thisCol] = array[thatRow][thatCol];
+            array[thatRow][thatCol] = temp;
+        }
+
+        public int[][] createDuplicateTiles() {
+            int[][] constructionTiles = new int[dimension][dimension];
+            for (int row = 0; row < dimension; row += 1) {
+                constructionTiles[row] = Arrays.copyOf(boardTiles[row], dimension);
+            }
+            return constructionTiles;
+        }
+
+        public NeighborsIterator() {
+            findEmptyTile();
+
+            if (emptyRowIndex == 0 && emptyColIndex == 0) {
+
+            }
+            neighbors[boardIndex] = new Board(constructionTiles);
         }
 
         public boolean hasNext() {
