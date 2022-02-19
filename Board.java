@@ -133,6 +133,7 @@ public class Board {
         public NeighborsIterator() {
             findEmptyTile();
 
+            // Empty cell at corners
             // Empty cell at top-left
             if (emptyRowIndex == 0 && emptyColIndex == 0) {
                 // Swap empty with right
@@ -160,6 +161,34 @@ public class Board {
 
             // Empty cell at bottom-right
             else if (emptyRowIndex == dimension && emptyColIndex == dimension) {
+
+            }
+
+            // ----------------------------------------------------------------------------------
+            // Empty cell at 4 sides, but not corners
+
+            // Empty cell at top row
+            else if (emptyRowIndex == 0) {
+
+            }
+
+            // Empty cell at bottom row
+            else if (emptyRowIndex == dimension) {
+
+            }
+
+            // Empty cell at left col
+            else if (emptyColIndex == 0) {
+
+            }
+
+            // Empty cell at right col
+            else if (emptyColIndex == dimension) {
+
+            }
+
+            // Empty cell can be swapped with 4 surrounding positions
+            else {
 
             }
         }
