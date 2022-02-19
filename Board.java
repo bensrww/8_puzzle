@@ -133,10 +133,35 @@ public class Board {
         public NeighborsIterator() {
             findEmptyTile();
 
+            // Empty cell at top-left
             if (emptyRowIndex == 0 && emptyColIndex == 0) {
+                // Swap empty with right
+                int[][] swapWithRight = createDuplicateTiles();
+                swapTile(swapWithRight, emptyRowIndex, emptyColIndex, emptyRowIndex,
+                         emptyColIndex + 1);
+                neighbors[0] = new Board(swapWithRight);
+
+                // Swap empty with below
+                int[][] swapWithBelow = createDuplicateTiles();
+                swapTile(swapWithBelow, emptyRowIndex, emptyColIndex, emptyRowIndex + 1,
+                         emptyColIndex);
+                neighbors[1] = new Board(swapWithRight);
+            }
+
+            // Empty cell at top-right
+            else if (emptyRowIndex == 0 && emptyColIndex == dimension) {
 
             }
-            neighbors[boardIndex] = new Board(constructionTiles);
+
+            // Empty cell at bottom-left
+            else if (emptyRowIndex == dimension && emptyColIndex == 0) {
+
+            }
+
+            // Empty cell at bottom-right
+            else if (emptyRowIndex == dimension && emptyColIndex == dimension) {
+
+            }
         }
 
         public boolean hasNext() {
