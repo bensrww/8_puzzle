@@ -193,27 +193,38 @@ public class Board {
 
             // Empty cell at top row
             else if (emptyRowIndex == 0) {
-
+                neighbors[0] = getDownNeighbor();
+                neighbors[1] = getLeftNeighbor();
+                neighbors[2] = getRightNeighbor();
             }
 
             // Empty cell at bottom row
             else if (emptyRowIndex == dimension) {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getLeftNeighbor();
+                neighbors[2] = getRightNeighbor();
             }
 
             // Empty cell at left col
             else if (emptyColIndex == 0) {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getDownNeighbor();
+                neighbors[2] = getRightNeighbor();
             }
 
             // Empty cell at right col
             else if (emptyColIndex == dimension) {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getDownNeighbor();
+                neighbors[2] = getLeftNeighbor();
             }
 
             // Empty cell can be swapped with 4 surrounding positions
             else {
-
+                neighbors[0] = getUpNeighbor();
+                neighbors[1] = getDownNeighbor();
+                neighbors[2] = getLeftNeighbor();
+                neighbors[3] = getRightNeighbor();
             }
         }
 
