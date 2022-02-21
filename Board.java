@@ -5,6 +5,7 @@
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,8 +19,14 @@ public class Board {
     // create a board from n-by-n array of tiles,
     // where tiles[row][col]] = tile at (row, col)
     public Board(int[][] tiles) {
-        boardTiles = tiles;
         dimension = tiles.length;
+        int[][] constructionTiles = new int[dimension][dimension];
+        for (int row = 0; row < dimension; row += 1) {
+            for (int col = 0; col < dimension; col += 1) {
+                constructionTiles[row][col] = tiles[row][col];
+            }
+        }
+        boardTiles = constructionTiles;
         hamming = hamming();
         manhattan = manhattan();
     }
@@ -101,6 +108,20 @@ public class Board {
         return new NeighborsIterator();
     }
 
+    public int[][] createDuplicateTiles() {
+        int[][] constructionTiles = new int[dimension][dimension];
+        for (int row = 0; row < dimension; row += 1) {
+            constructionTiles[row] = Arrays.copyOf(boardTiles[row], dimension);
+        }
+        return constructionTiles;
+    }
+
+    public void swapTile(int[][] array, int thisRow, int thisCol, int thatRow, int thatCol) {
+        int temp = array[thisRow][thisCol];
+        array[thisRow][thisCol] = array[thatRow][thatCol];
+        array[thatRow][thatCol] = temp;
+    }
+
     private class NeighborsIterator implements Iterator<Board> {
         Board[] neighbors = new Board[4];
         int index = 0;
@@ -117,20 +138,6 @@ public class Board {
                     }
                 }
             }
-        }
-
-        public void swapTile(int[][] array, int thisRow, int thisCol, int thatRow, int thatCol) {
-            int temp = array[thisRow][thisCol];
-            array[thisRow][thisCol] = array[thatRow][thatCol];
-            array[thatRow][thatCol] = temp;
-        }
-
-        public int[][] createDuplicateTiles() {
-            int[][] constructionTiles = new int[dimension][dimension];
-            for (int row = 0; row < dimension; row += 1) {
-                constructionTiles[row] = Arrays.copyOf(boardTiles[row], dimension);
-            }
-            return constructionTiles;
         }
 
         public Board getUpNeighbor() {
@@ -174,19 +181,19 @@ public class Board {
             }
 
             // Empty cell at top-right
-            else if (emptyRowIndex == 0 && emptyColIndex == dimension) {
+            else if (emptyRowIndex == 0 && emptyColIndex == dimension - 1) {
                 neighbors[0] = getLeftNeighbor();
                 neighbors[1] = getDownNeighbor();
             }
 
             // Empty cell at bottom-left
-            else if (emptyRowIndex == dimension && emptyColIndex == 0) {
+            else if (emptyRowIndex == dimension - 1 && emptyColIndex == 0) {
                 neighbors[0] = getUpNeighbor();
                 neighbors[1] = getRightNeighbor();
             }
 
             // Empty cell at bottom-right
-            else if (emptyRowIndex == dimension && emptyColIndex == dimension) {
+            else if (emptyRowIndex == dimension - 1 && emptyColIndex == dimension - 1) {
                 neighbors[0] = getUpNeighbor();
                 neighbors[1] = getLeftNeighbor();
             }
@@ -202,7 +209,7 @@ public class Board {
             }
 
             // Empty cell at bottom row
-            else if (emptyRowIndex == dimension) {
+            else if (emptyRowIndex == dimension - 1) {
                 neighbors[0] = getUpNeighbor();
                 neighbors[1] = getLeftNeighbor();
                 neighbors[2] = getRightNeighbor();
@@ -216,7 +223,7 @@ public class Board {
             }
 
             // Empty cell at right col
-            else if (emptyColIndex == dimension) {
+            else if (emptyColIndex == dimension - 1) {
                 neighbors[0] = getUpNeighbor();
                 neighbors[1] = getDownNeighbor();
                 neighbors[2] = getLeftNeighbor();
@@ -244,7 +251,24 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
+        int[][] duplicate = createDuplicateTiles();
+        int sourceRow = StdRandom.uniform(dimension);
+        int sourceCol = StdRandom.uniform(dimension);
+        int destRow = StdRandom.uniform(dimension);
+        int destCol = StdRandom.uniform(dimension);
 
+        while (duplicate[sourceRow][sourceCol] == 0 || duplicate[destRow][destCol] == 0 || (
+                sourceRow == destRow && sourceCol == destCol)) {
+            sourceRow = StdRandom.uniform(dimension);
+            sourceCol = StdRandom.uniform(dimension);
+            destRow = StdRandom.uniform(dimension);
+            destCol = StdRandom.uniform(dimension);
+        }
+
+        StdRandom.uniform(dimension);
+        swapTile(duplicate, sourceRow, sourceCol, destRow,
+                 destCol);
+        return new Board(duplicate);
     }
 
     // unit testing (not graded)
@@ -261,6 +285,13 @@ public class Board {
             }
             // solve the slider puzzle
             Board initial = new Board(tiles);
+            System.out.println(initial.toString());
+
+            Iterator<Board> i = initial.neighbors();
+            while (i.hasNext()) {
+                Board b = i.next();
+                System.out.println(b);
+            }
             // Solver solver = new Solver(initial);
             // StdOut.println(filename + ": " + solver.moves());
 
