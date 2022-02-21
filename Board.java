@@ -27,12 +27,15 @@ public class Board {
     // string representation of this board
     public String toString() {
         System.out.println(dimension);
+        StringBuilder s = new StringBuilder();
+        s.append(dimension + "\n");
         for (int row = 0; row < dimension; row += 1) {
             for (int col = 0; col < dimension; col += 1) {
-                System.out.print(boardTiles[row][col] + " ");
+                s.append(String.format("%2d ", boardTiles[row][col]));
             }
-            System.out.println();
+            s.append("\n");
         }
+        return s.toString();
     }
 
     // number of tiles out of place
