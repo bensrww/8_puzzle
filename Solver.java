@@ -4,10 +4,36 @@
  *  Description:
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.MinPQ;
+
 public class Solver {
+    private Board[] solutions;
+    private int numOfSteps = 0;
+
+    private class SearchNode {
+        public Board current;
+        public int moves;
+        public Board previous;
+        public int priority;
+
+        public SearchNode(Board current, int moves, Board previous) {
+            this.current = current;
+            this.moves = moves;
+            this.previous = previous;
+
+            this.priority = moves + current.manhattan();
+        }
+    }
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
+        if (initial == null) {
+            throw new IllegalArgumentException();
+        }
+
+        MinPQ minPq = new MinPQ();
+        SearchNode initNode = new SearchNode(initial, 0, null);
+        minPq.insert(initNode);
 
     }
 
@@ -18,13 +44,20 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return 0;
+        if (!isSolvable()) {
+            return -1;
+        }
+        return numOfSteps;
     }
 
     // sequence of board in a shortest solution; null if unsolvable
-    // public Iterable<Board> solution() {
-    //
-    // }
+    public Iterable<Board> solution() {
+        if (!isSolvable()) {
+            return null;
+        }
+
+        return null;
+    }
 
     // test client
     public static void main(String[] args) {
