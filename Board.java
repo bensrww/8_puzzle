@@ -239,13 +239,14 @@ public class Board {
         }
 
         public boolean hasNext() {
+            if (index >= 4) return false;
             return neighbors[index] != null;
         }
 
         public Board next() {
-            int currentIndex = index;
+            Board currentBoard = neighbors[index];
             index += 1;
-            return neighbors[currentIndex];
+            return currentBoard;
         }
     }
 
