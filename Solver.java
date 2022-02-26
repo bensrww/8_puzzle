@@ -77,7 +77,7 @@ public class Solver {
         SearchNode initNode = new SearchNode(initialBoard, 0, null);
         SearchNode initTwinNode = new SearchNode(twin, 0, null);
         initialPq.insert(initNode);
-        initialPq.insert(initTwinNode);
+        twinPq.insert(initTwinNode);
         int numOfStepsIsSolvable = 0;
 
         while (true) {
