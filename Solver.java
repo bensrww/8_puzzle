@@ -54,6 +54,8 @@ public class Solver {
         while (true) {
             Board minBoard = minPq.delMin().board;
             if (minBoard.isGoal()) {
+                solutions[numOfSteps] = minBoard;
+                numOfSteps += 1;
                 break;
             }
             solutions[numOfSteps] = minBoard;
