@@ -52,7 +52,7 @@ public class Board {
             for (int col = 0; col < dimension; col += 1) {
                 final int targetPosition = row * dimension + col + 1;
                 if (boardTiles[row][col] != targetPosition && (
-                        row != dimension - 1 && col != dimension - 1
+                        !(row == dimension - 1 && col == dimension - 1)
                 )) {
                     hammingDistance += 1;
                 }
@@ -287,11 +287,19 @@ public class Board {
             // solve the slider puzzle
             Board initial = new Board(tiles);
             System.out.println(initial.toString());
+            System.out.println("initial hamming, manhattan");
+            System.out.println(initial.hamming);
+            System.out.println(initial.manhattan);
+            System.out.println("-------------------");
 
             Iterator<Board> i = initial.neighbors();
             while (i.hasNext()) {
                 Board b = i.next();
-                System.out.println(b);
+                System.out.println("neighbor hamming, manhattan");
+                System.out.println(b.toString());
+                System.out.println(b.hamming);
+                System.out.println(b.manhattan);
+                System.out.println("-------------------");
             }
             // Solver solver = new Solver(initial);
             // StdOut.println(filename + ": " + solver.moves());
