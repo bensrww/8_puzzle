@@ -33,7 +33,6 @@ public class Board {
 
     // string representation of this board
     public String toString() {
-        System.out.println(dimension);
         StringBuilder s = new StringBuilder();
         s.append(dimension + "\n");
         for (int row = 0; row < dimension; row += 1) {
@@ -68,10 +67,9 @@ public class Board {
             for (int col = 0; col < dimension; col += 1) {
                 final int targetPosition = row * dimension + col + 1;
                 final int currentElement = boardTiles[row][col];
-                if (currentElement != targetPosition && row != dimension - 1
-                        && col != dimension - 1) {
-                    final int targetRowIndex = currentElement / dimension;
-                    final int targetColIndex = currentElement % dimension - 1;
+                if ((currentElement != targetPosition) && boardTiles[row][col] != 0) {
+                    final int targetRowIndex = Math.abs(currentElement / (dimension + 1));
+                    final int targetColIndex = Math.abs(currentElement % dimension - 1);
                     manhanttanDistance += Math.abs(row - targetRowIndex);
                     manhanttanDistance += Math.abs(col - targetColIndex);
                 }
