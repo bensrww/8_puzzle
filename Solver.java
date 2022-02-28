@@ -61,7 +61,6 @@ public class Solver {
             Board minBoard = minPq.delMin().board;
             if (minBoard.isGoal()) {
                 solutions[numOfSteps] = minBoard;
-                numOfSteps += 1;
                 break;
             }
             solutions[numOfSteps] = minBoard;
@@ -119,7 +118,7 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        if (!isSolvable) {
+        if (!isSolvable()) {
             return -1;
         }
         return numOfSteps;
@@ -148,7 +147,7 @@ public class Solver {
 
     // sequence of board in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-        if (!isSolvable) {
+        if (!isSolvable()) {
             return null;
         }
         return new SolutionIterable();
