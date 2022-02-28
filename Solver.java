@@ -15,6 +15,7 @@ public class Solver {
     private Board[] solutions;
     private int numOfSteps = 0;
     private Board initialBoard;
+    private boolean isSolvable;
 
     private class SearchNode {
         public Board board;
@@ -46,6 +47,11 @@ public class Solver {
         }
 
         initialBoard = initial;
+        boolean isInitialSolvable = isSolvable();
+        if (!isInitialSolvable) {
+            isSolvable = false;
+            return;
+        }
         solutions = new Board[64];
         MinPQ<SearchNode> minPq = new MinPQ<SearchNode>(new SearchNodeComparator());
         SearchNode initNode = new SearchNode(initial, 0, null);
@@ -113,7 +119,7 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        if (!isSolvable()) {
+        if (!isSolvable) {
             return -1;
         }
         return numOfSteps;
@@ -142,7 +148,7 @@ public class Solver {
 
     // sequence of board in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-        if (!isSolvable()) {
+        if (!isSolvable) {
             return null;
         }
         return new SolutionIterable();
