@@ -36,6 +36,8 @@ public class Solver {
         public int compare(SearchNode a, SearchNode b) {
             if ((a.priority - b.priority) > 0) return 1;
             if ((a.priority - b.priority) < 0) return -1;
+            if (a.board.manhattan() < b.board.manhattan()) return -1;
+            if (a.board.manhattan() > b.board.manhattan()) return 1;
             return 0;
         }
     }
