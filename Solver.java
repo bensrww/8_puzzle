@@ -20,10 +20,10 @@ public class Solver {
     private class SearchNode {
         public Board board;
         public int moves;
-        public Board previous;
+        public SearchNode previous;
         public int priority;
 
-        public SearchNode(Board current, int moves, Board previous) {
+        public SearchNode(Board current, int moves, SearchNode previous) {
             this.board = current;
             this.moves = moves;
             this.previous = previous;
@@ -60,7 +60,8 @@ public class Solver {
         minPq.insert(initNode);
 
         while (true) {
-            Board minBoard = minPq.delMin().board;
+            SearchNode minNode = minPq.delMin();
+            Board minBoard = minNode.board;
             if (minBoard.isGoal()) {
                 solutions[numOfSteps] = minBoard;
                 break;
@@ -69,8 +70,10 @@ public class Solver {
             Iterator<Board> neighborsIterator = minBoard.neighbors();
             while (neighborsIterator.hasNext()) {
                 Board neighbor = neighborsIterator.next();
-                SearchNode node = new SearchNode(neighbor, numOfSteps + 1, minBoard);
-                if (!node.board.equals(node.previous)) {
+                SearchNode node = new SearchNode(neighbor, numOfSteps + 1, minNode);
+                if (node.previous.previous == null) {
+                    minPq.insert(node);
+                } else if (!node.board.equals(node.previous.previous.board)) {
                     minPq.insert(node);
                 }
             }
@@ -90,8 +93,10 @@ public class Solver {
         int numOfStepsIsSolvable = 0;
 
         while (true) {
-            Board minBoard = initialPq.delMin().board;
-            Board minTwinBoard = twinPq.delMin().board;
+            SearchNode minNode = initialPq.delMin();
+            SearchNode minTwinNode = twinPq.delMin();
+            Board minBoard = minNode.board;
+            Board minTwinBoard = minTwinNode.board;
             if (minBoard.isGoal()) {
                 return true;
             }
@@ -101,8 +106,10 @@ public class Solver {
             Iterator<Board> neighborsIterator = minBoard.neighbors();
             while (neighborsIterator.hasNext()) {
                 Board neighbor = neighborsIterator.next();
-                SearchNode node = new SearchNode(neighbor, numOfStepsIsSolvable + 1, minBoard);
-                if (!node.board.equals(node.previous)) {
+                SearchNode node = new SearchNode(neighbor, numOfStepsIsSolvable + 1, minNode);
+                if (node.previous.previous == null) {
+                    initialPq.insert(node);
+                } else if (!node.board.equals(node.previous.previous.board)) {
                     initialPq.insert(node);
                 }
             }
@@ -110,8 +117,10 @@ public class Solver {
             Iterator<Board> neighborsIteratorTwin = minTwinBoard.neighbors();
             while (neighborsIteratorTwin.hasNext()) {
                 Board neighbor = neighborsIteratorTwin.next();
-                SearchNode node = new SearchNode(neighbor, numOfStepsIsSolvable + 1, minTwinBoard);
-                if (!node.board.equals(node.previous)) {
+                SearchNode node = new SearchNode(neighbor, numOfStepsIsSolvable + 1, minTwinNode);
+                if (node.previous.previous == null) {
+                    twinPq.insert(node);
+                } else if (!node.board.equals(node.previous.previous.board)) {
                     twinPq.insert(node);
                 }
             }
