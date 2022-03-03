@@ -128,7 +128,7 @@ public class Solver {
         private int index = 0;
 
         public boolean hasNext() {
-            if (index >= numOfSteps) return false;
+            if (index >= numOfSteps + 1) return false; // including initial board
             return solutions[index] != null;
         }
 
